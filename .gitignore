@@ -1,0 +1,22 @@
+# OS files
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Editors / IDE
+.vscode/
+.idea/
+*.swp
+
+# Build & dependencies
+node_modules/
+dist/
+build/
+
+# Logs
+*.log
+
+# Local env / secrets — never commit
+.env
+.env.*
+*.pem
