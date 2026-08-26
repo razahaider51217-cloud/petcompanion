@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pawcompanion.example/sitemap.xml
+Sitemap: https://petascompanion-nb5if.ondigitalocean.app/sitemap.xml
