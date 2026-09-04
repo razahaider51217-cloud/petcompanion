@@ -514,3 +514,153 @@ p{color:var(--ink-soft)}
 .btn--light{background:#fff;color:var(--brand-dark);box-shadow:0 12px 26px rgba(0,0,0,.12)}
 .btn--light:hover{background:var(--bg)}
 .today-banner .btn--light{background:#fff;color:var(--teal-dark)}
+
+/* ==========================================================================
+   PawCompanion — 3D Depth, Parallax & Motion Layer
+   Google Ads-friendly: honest unchanged messaging, GPU-friendly transform /
+   opacity animations only (no hijacking behaviour), respects reduced-motion,
+   and is fully legible/functional even with JS or interaction disabled.
+   ========================================================================== */
+
+:root{
+  --glow-brand:rgba(255,122,89,.42);
+  --glow-teal:rgba(46,196,182,.38);
+  --glow-gold:rgba(255,183,3,.30);
+  --ring:rgba(255,122,89,.35);
+}
+
+/* ---------- Ambient aurora background (hero + inner page heros) ---------- */
+.hero::before,
+.page-hero::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(42rem 42rem at 88% -18%, var(--glow-brand), transparent 55%),
+    radial-gradient(36rem 36rem at -8% 118%, var(--glow-teal), transparent 55%),
+    radial-gradient(26rem 26rem at 52% 132%, var(--glow-gold), transparent 55%);
+  filter:blur(4px);opacity:.85;
+  animation:aurora 20s ease-in-out infinite alternate;
+}
+.hero>.container,.page-hero .container{position:relative;z-index:2}
+@keyframes aurora{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(-42px,24px,0) scale(1.06)}}
+
+/* ---------- 3D tilt interaction (enhancement only, safe fallback) ---------- */
+[data-tilt]{
+  --rx:0deg;--ry:0deg;--gx:50%;--gy:50%;
+  transform:perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style:preserve-3d;
+  transition:transform .22s cubic-bezier(.22,.61,.36,1);
+  will-change:transform;
+}
+[data-tilt].glare{position:relative}
+[data-tilt].glare::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(46% 46% at var(--gx) var(--gy), rgba(255,255,255,.5), transparent 60%);
+  opacity:0;transition:opacity .3s;z-index:3;
+}
+[data-tilt].glare:hover::after{opacity:1}
+
+/* ---------- Depth scenes / 3D containers ---------- */
+.hero-media{transform-style:preserve-3d;perspective:1200px}
+.hero-media .media-main{transform:translateZ(24px)}
+.hero-card{--tz:46px;transform:translateZ(var(--tz));animation:floatY 6s ease-in-out infinite}
+.hero-card.float-right{--tz:86px;animation-delay:-3s}
+@keyframes floatY{0%,100%{transform:translateZ(var(--tz)) translateY(0)}50%{transform:translateZ(var(--tz)) translateY(-13px)}}
+
+/* Decorative floating paw & orbit ring (deco only, behind content) */
+.paw-float{
+  position:absolute;color:var(--brand);opacity:.14;pointer-events:none;z-index:0;
+  animation:floatSpin 12s linear infinite;filter:drop-shadow(0 20px 30px rgba(43,43,58,.12));
+}
+@keyframes floatSpin{0%{transform:translateY(0) rotate(0)}50%{transform:translateY(-22px) rotate(14deg)}100%{transform:translateY(0) rotate(0)}}
+.orbit{
+  position:absolute;border:2px dashed var(--ring);border-radius:50%;pointer-events:none;z-index:0;
+  animation:orbit 26s linear infinite;
+}
+@keyframes orbit{to{transform:rotate(360deg)}}
+
+/* ---------- Layered depth shadows + 3D lift on key cards ---------- */
+.feature,.card,.plan,.update-item,.video-card,.blog-card,.media-frame,.today-banner,
+.testi,.member,.form-card,.reminder-wrap,.compare-wrap,.toc,.post-author,.fact-box .fact{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.7),
+    0 24px 50px -22px rgba(43,43,58,.30),
+    0 10px 22px -12px rgba(43,43,58,.18);
+  transition:transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .35s cubic-bezier(.22,.61,.36,1);
+}
+.feature:hover,.card:hover,.plan:hover,.update-item:hover,.video-card:hover,.blog-card:hover,
+.testi:hover,.member:hover{
+  transform:perspective(950px) translateY(-9px) rotateX(1.6deg) scale(1.015);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.85),
+    0 46px 90px -28px rgba(43,43,58,.45),
+    0 22px 44px -20px rgba(43,43,58,.32);
+}
+.media-frame:hover,.form-card:hover,.reminder-wrap:hover,.compare-wrap:hover,.today-banner:hover{
+  transform:translateY(-6px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.8),
+    0 40px 80px -26px rgba(43,43,58,.42),
+    0 18px 36px -18px rgba(43,43,58,.28);
+}
+.plan--featured{transform:translateY(-4px)}
+.plan--featured:hover{transform:perspective(950px) translateY(-12px) rotateX(1.6deg) scale(1.02)}
+
+
+
+
+/* ---------- 3D press for primary buttons ---------- */
+.btn--brand,.btn--teal,.btn--dark{will-change:transform}
+.btn--brand:hover,.btn--teal:hover,.btn--dark:hover{transform:translateY(-3px) scale(1.02)}
+.btn--brand:active,.btn--teal:active,.btn--dark:active{transform:translateY(1px) scale(.99)}
+.btn--brand,.btn--teal{box-shadow:0 16px 32px -8px var(--glow-brand), inset 0 -3px 0 rgba(0,0,0,.14)}
+.btn--teal{box-shadow:0 16px 32px -8px var(--glow-teal), inset 0 -3px 0 rgba(0,0,0,.14)}
+
+/* ---------- Glassmorphism panels ---------- */
+.glass{
+  background:rgba(255,255,255,.72);
+  backdrop-filter:blur(14px) saturate(160%);
+  -webkit-backdrop-filter:blur(14px) saturate(160%);
+  border:1px solid rgba(255,255,255,.6);
+  box-shadow:0 24px 52px -22px rgba(43,43,58,.32);
+}
+.site-header{background:rgba(255,248,241,.72);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%)}
+
+/* ---------- Gradient accent text (subtle) ---------- */
+.grad-text{
+  background:linear-gradient(120deg,var(--brand-dark),var(--teal-dark) 70%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero-copy h1 .hl{background:linear-gradient(120deg,var(--brand),var(--brand-dark) 75%);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* ---------- Shine sweep on hover ---------- */
+.shine{position:relative;overflow:hidden}
+.shine::after{
+  content:"";position:absolute;top:0;left:-120%;width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:skewX(-18deg);transition:left .7s cubic-bezier(.22,.61,.36,1);
+}
+.shine:hover::after{left:130%}
+
+/* ---------- Generic float utility ---------- */
+.float-y{animation:floatSimple 7s ease-in-out infinite}
+@keyframes floatSimple{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+
+/* ---------- Reduced motion: disable movement for accessibility ---------- */
+@media (prefers-reduced-motion: reduce){
+  .hero::before,.page-hero::before,.paw-float,.orbit,.float-y,.hero-card,
+  .play-btn,.reveal{animation:none!important}
+  .feature,.card,.plan,.update-item,.video-card,.blog-card,.media-frame,.today-banner,
+  .testi,.member,.form-card,.reminder-wrap,.compare-wrap,.toc,.post-author{
+    transition:none!important;transform:none!important;box-shadow:var(--shadow-sm)!important;
+  }
+  [data-tilt]{transform:none!important}
+
+/* ---------- Mobile: soften depth so stacked hero cards stay clean ---------- */
+@media (max-width:768px){
+  .hero-card{animation:none;transform:none}
+  .hero-media{perspective:none;transform-style:flat}
+  .hero-media .media-main{transform:none}
+  [data-tilt]{transform:none!important}
+}
+
+}

@@ -313,10 +313,30 @@
     }
   }
 
+  /* ---------- 3D tilt + glare (enhancement; safe on touch / reduced motion) ---------- */
+  function initTilt() {
+    if (window.matchMedia && window.matchMedia('(pointer:coarse)').matches) return;
+    const mq = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+    qsa('[data-tilt]').forEach((el) => {
+      const max = parseFloat(el.getAttribute('data-tilt-max')) || 8;
+      const useGlare = el.hasAttribute('data-glare') && !(mq && mq.matches);
+      on(el, 'mousemove', (e) => {
+        const r = el.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width;
+        const py = (e.clientY - r.top) / r.height;
+        el.style.setProperty('--ry', ((px - .5) * 2 * max) + 'deg');
+        el.style.setProperty('--rx', ((.5 - py) * 2 * max) + 'deg');
+        if (useGlare) { el.style.setProperty('--gx', (px * 100) + '%'); el.style.setProperty('--gy', (py * 100) + '%'); }
+      });
+      on(el, 'mouseleave', () => { el.style.setProperty('--rx', '0deg'); el.style.setProperty('--ry', '0deg'); });
+    });
+  }
+
   /* ---------- Boot ---------- */
   document.addEventListener('DOMContentLoaded', () => {
     initNav();
     initReveal();
+    initTilt();
     initBackTop();
     initFaq();
     initVideos();

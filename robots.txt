@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://petascompanion-nb5if.ondigitalocean.app/sitemap.xml
+Sitemap: https://petsupplies-ke974.ondigitalocean.app/sitemap.xml
