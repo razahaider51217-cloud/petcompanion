@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://petsupplies-ke974.ondigitalocean.app/sitemap.xml
